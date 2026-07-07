@@ -1,0 +1,20 @@
+# .NET build artifacts
+bin/
+obj/
+*.user
+*.suo
+.vs/
+
+# Publish output and assembled bundle (rebuilt via build/build.sh)
+build/out/
+build/AvrdudeUI.app/
+
+# macOS
+.DS_Store
+
+# JetBrains
+.idea/
+
+# Persisted user config (should never leak into the repo)
+config.xml
+presets.xml

@@ -1,0 +1,65 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="AvrdudeUI.Views.OptionsWindow"
+        Width="620" Height="640"
+        WindowStartupLocation="CenterOwner"
+        Title="Options">
+    <Grid RowDefinitions="Auto,*,Auto" Margin="16">
+
+        <StackPanel Grid.Row="0" Spacing="8">
+            <TextBlock Text="Executable locations (leave blank to auto-detect)"
+                       FontWeight="SemiBold"/>
+
+            <Grid ColumnDefinitions="120,*,Auto" RowDefinitions="Auto,Auto,Auto" Margin="0,4,0,0">
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="avrdude:"       VerticalAlignment="Center" Margin="0,4"/>
+                <TextBox   Grid.Row="0" Grid.Column="1" Name="TxtAvrdude"     Margin="0,4,6,4"/>
+                <Button    Grid.Row="0" Grid.Column="2" Content="Browse…"    Margin="0,4"  Click="OnBrowseAvrdude"/>
+
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="avrdude.conf:"  VerticalAlignment="Center" Margin="0,4"/>
+                <TextBox   Grid.Row="1" Grid.Column="1" Name="TxtAvrdudeConf" Margin="0,4,6,4"/>
+                <Button    Grid.Row="1" Grid.Column="2" Content="Browse…"    Margin="0,4"  Click="OnBrowseAvrdudeConf"/>
+
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="avr-size:"      VerticalAlignment="Center" Margin="0,4"/>
+                <TextBox   Grid.Row="2" Grid.Column="1" Name="TxtAvrSize"     Margin="0,4,6,4"/>
+                <Button    Grid.Row="2" Grid.Column="2" Content="Browse…"    Margin="0,4"  Click="OnBrowseAvrSize"/>
+            </Grid>
+
+            <CheckBox Name="CbShowToolTips"      Content="Show tool tips"                          Margin="0,8,0,0"/>
+            <CheckBox Name="CbUsePrevSettings"   Content="Remember settings when app closes"/>
+            <CheckBox Name="CbCheckForUpdate"    Content="Check for updates on startup"/>
+
+            <Grid ColumnDefinitions="120,*" Margin="0,8,0,0">
+                <TextBlock Grid.Column="0" Text="Language:" VerticalAlignment="Center"/>
+                <ComboBox  Grid.Column="1" Name="CbLanguage" HorizontalAlignment="Stretch"/>
+            </Grid>
+        </StackPanel>
+
+        <Grid Grid.Row="1" Margin="0,16,0,0" ColumnDefinitions="*,12,*" RowDefinitions="Auto,*,Auto">
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="Hidden programmers" FontWeight="SemiBold"/>
+            <TextBlock Grid.Row="0" Grid.Column="2" Text="Hidden MCUs"        FontWeight="SemiBold"/>
+
+            <ListBox   Grid.Row="1" Grid.Column="0" Name="LbHiddenProgrammers"
+                       BorderBrush="#333" BorderThickness="1"
+                       SelectionMode="Multiple,Toggle"/>
+            <ListBox   Grid.Row="1" Grid.Column="2" Name="LbHiddenMCUs"
+                       BorderBrush="#333" BorderThickness="1"
+                       SelectionMode="Multiple,Toggle"/>
+
+            <Button Grid.Row="2" Grid.Column="0" Margin="0,6,0,0"
+                    Content="Check / Uncheck all"
+                    HorizontalAlignment="Stretch"
+                    Click="OnToggleAllProgrammers"/>
+            <Button Grid.Row="2" Grid.Column="2" Margin="0,6,0,0"
+                    Content="Check / Uncheck all"
+                    HorizontalAlignment="Stretch"
+                    Click="OnToggleAllMCUs"/>
+        </Grid>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Spacing="8" Margin="0,16,0,0">
+            <Button Content="Cancel" IsCancel="True"  MinWidth="80" Click="OnCancelClick"/>
+            <Button Content="OK"     IsDefault="True" MinWidth="80" Click="OnOkClick"/>
+        </StackPanel>
+    </Grid>
+</Window>

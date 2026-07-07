@@ -1,0 +1,39 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="AvrdudeUI.Views.UpdateWindow"
+        Width="520" Height="440"
+        WindowStartupLocation="CenterOwner"
+        CanResize="False"
+        Title="Update available">
+    <Grid RowDefinitions="Auto,Auto,*,Auto" Margin="16" ColumnDefinitions="Auto,*">
+        <TextBlock Grid.Row="0" Grid.Column="0"
+                   Text="Installed version:" Margin="0,0,10,4" FontWeight="SemiBold"/>
+        <TextBlock Grid.Row="0" Grid.Column="1" Name="LblCurrent" Margin="0,0,0,4"/>
+
+        <TextBlock Grid.Row="1" Grid.Column="0"
+                   Text="Latest release:" Margin="0,0,10,10" FontWeight="SemiBold"/>
+        <TextBlock Grid.Row="1" Grid.Column="1" Name="LblLatest" Margin="0,0,0,10"/>
+
+        <Border Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+                BorderBrush="#333" BorderThickness="1" CornerRadius="4"
+                Padding="8">
+            <ScrollViewer>
+                <SelectableTextBlock Name="TxtInfo"
+                                     FontFamily="Menlo,Monaco,Consolas,monospace"
+                                     FontSize="12"
+                                     TextWrapping="Wrap"/>
+            </ScrollViewer>
+        </Border>
+
+        <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Margin="0,12,0,0"
+                    Spacing="8">
+            <Button Name="BtnSkip"   Content="Skip this version" IsEnabled="False" Click="OnSkipClick"/>
+            <Button Name="BtnLater"  Content="Later"             IsEnabled="False" Click="OnLaterClick"/>
+            <Button Name="BtnUpdate" Content="Download update"   IsEnabled="False" Click="OnUpdateClick"
+                    IsDefault="True"/>
+        </StackPanel>
+    </Grid>
+</Window>

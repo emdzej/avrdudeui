@@ -1,0 +1,29 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="AvrdudeUI.Views.FuseSelectorWindow"
+        Width="820" SizeToContent="Height"
+        WindowStartupLocation="CenterOwner"
+        CanResize="False"
+        Title="Fuse and lock bit selector">
+    <StackPanel Margin="16" Spacing="12">
+
+        <TextBlock Name="LblUnsupported"
+                   IsVisible="False"
+                   FontStyle="Italic"
+                   Foreground="#e0a030"
+                   TextWrapping="Wrap"
+                   Text="No fuse-bit names available for this MCU — labels are unknown."/>
+
+        <Grid Name="BitsGrid"
+              RowDefinitions="Auto,Auto,Auto,Auto,Auto"
+              ColumnDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"/>
+
+        <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Spacing="8"
+                    Margin="0,8,0,0">
+            <Button Content="Cancel" IsCancel="True" MinWidth="80" Click="OnCancelClick"/>
+            <Button Content="OK"     IsDefault="True" MinWidth="80" Click="OnOkClick"/>
+        </StackPanel>
+    </StackPanel>
+</Window>

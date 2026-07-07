@@ -1,0 +1,193 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="1080" d:DesignHeight="760"
+        x:Class="AvrdudeUI.Views.MainWindow"
+        Title="AvrdudeUI"
+        Width="1080" Height="760"
+        MinWidth="900" MinHeight="600"
+        WindowStartupLocation="CenterScreen">
+
+    <DockPanel LastChildFill="True">
+
+        <!-- Status bar -->
+        <Border DockPanel.Dock="Bottom"
+                Background="#181818"
+                BorderBrush="#333" BorderThickness="0,1,0,0"
+                Padding="10,4">
+            <Grid ColumnDefinitions="*,Auto">
+                <TextBlock Grid.Column="0" Name="LblStatus" Text="Ready"
+                           VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="1" Name="LblAvrdudeVersion" Text=""
+                           VerticalAlignment="Center"
+                           FontFamily="Menlo,Monaco,Consolas,monospace"
+                           FontSize="11"
+                           Foreground="#909090"/>
+            </Grid>
+        </Border>
+
+        <!-- Top settings grid -->
+        <Grid DockPanel.Dock="Top" Margin="12,12,12,0"
+              RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"
+              ColumnDefinitions="*,12,*">
+
+            <!-- Row 0: Programmer / Detect -->
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="Programmer" FontWeight="SemiBold" Margin="0,0,0,4"/>
+            <TextBlock Grid.Row="0" Grid.Column="2" Text="MCU"        FontWeight="SemiBold" Margin="0,0,0,4"/>
+
+            <Grid Grid.Row="1" Grid.Column="0" ColumnDefinitions="*,Auto">
+                <ComboBox Grid.Column="0" Name="CbProgrammer" HorizontalAlignment="Stretch"/>
+            </Grid>
+            <Grid Grid.Row="1" Grid.Column="2" ColumnDefinitions="*,Auto">
+                <ComboBox Grid.Column="0" Name="CbMcu" HorizontalAlignment="Stretch"/>
+                <Button   Grid.Column="1" Name="BtnDetect" Content="Detect" Margin="6,0,0,0" Click="OnDetectClick"/>
+            </Grid>
+
+            <!-- Row 2: Port / Baud+BitClock -->
+            <TextBlock Grid.Row="2" Grid.Column="0" Text="Port"     FontWeight="SemiBold" Margin="0,10,0,4"/>
+            <TextBlock Grid.Row="2" Grid.Column="2" Text="Baud rate / bit clock" FontWeight="SemiBold" Margin="0,10,0,4"/>
+
+            <Grid Grid.Row="3" Grid.Column="0" ColumnDefinitions="*,Auto">
+                <ComboBox Grid.Column="0" Name="CbPort"
+                          IsEditable="True"
+                          HorizontalAlignment="Stretch"
+                          DropDownOpened="OnPortDropDownOpened"/>
+                <Button   Grid.Column="1" Content="Refresh" Margin="6,0,0,0" Click="OnRefreshPortsClick"/>
+            </Grid>
+            <Grid Grid.Row="3" Grid.Column="2" ColumnDefinitions="*,10,*">
+                <TextBox Grid.Column="0" Name="TxtBaud"     PlaceholderText="baud"/>
+                <TextBox Grid.Column="2" Name="TxtBitClock" PlaceholderText="bit clock (µs)"/>
+                <ComboBox Grid.Column="2" Name="CbUsbAspFreq"
+                          HorizontalAlignment="Stretch"
+                          IsVisible="False"
+                          SelectionChanged="OnUsbAspFreqChanged"/>
+            </Grid>
+
+            <!-- Row 4: Flash file -->
+            <TextBlock Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3"
+                       Text="Flash file"
+                       FontWeight="SemiBold" Margin="0,14,0,4"/>
+            <Grid Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3"
+                  ColumnDefinitions="*,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
+                <TextBox Grid.Column="0" Name="TxtFlashFile"/>
+                <Button  Grid.Column="1" Content="Browse…" Margin="6,0,0,0" Click="OnBrowseFlashClick"/>
+                <RadioButton Grid.Column="2" GroupName="FlashOp" Name="RbFlashWrite"  Content="Write"  IsChecked="True" Margin="12,0,0,0" IsCheckedChanged="OnFlashOpChanged"/>
+                <RadioButton Grid.Column="3" GroupName="FlashOp" Name="RbFlashRead"   Content="Read"   Margin="6,0,0,0"  IsCheckedChanged="OnFlashOpChanged"/>
+                <RadioButton Grid.Column="4" GroupName="FlashOp" Name="RbFlashVerify" Content="Verify" Margin="6,0,0,0"  IsCheckedChanged="OnFlashOpChanged"/>
+                <ComboBox    Grid.Column="5" Name="CbFlashFormat" Margin="12,0,0,0" MinWidth="120"/>
+                <Button      Grid.Column="6" Name="BtnFlashGo" Content="Go"   Margin="6,0,0,0" Click="OnFlashGoClick"/>
+                <TextBlock   Grid.Column="7" Name="LblFlashUsage" Margin="12,0,0,0"
+                             VerticalAlignment="Center"
+                             FontFamily="Menlo,Monaco,Consolas,monospace" FontSize="11"
+                             Foreground="#a0a0a0"/>
+            </Grid>
+
+            <!-- Row 6: EEPROM file -->
+            <TextBlock Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="3"
+                       Text="EEPROM file"
+                       FontWeight="SemiBold" Margin="0,10,0,4"/>
+            <Grid Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="3"
+                  ColumnDefinitions="*,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
+                <TextBox Grid.Column="0" Name="TxtEepromFile"/>
+                <Button  Grid.Column="1" Content="Browse…" Margin="6,0,0,0" Click="OnBrowseEepromClick"/>
+                <RadioButton Grid.Column="2" GroupName="EepromOp" Name="RbEepromWrite"  Content="Write"  IsChecked="True" Margin="12,0,0,0" IsCheckedChanged="OnEepromOpChanged"/>
+                <RadioButton Grid.Column="3" GroupName="EepromOp" Name="RbEepromRead"   Content="Read"   Margin="6,0,0,0"  IsCheckedChanged="OnEepromOpChanged"/>
+                <RadioButton Grid.Column="4" GroupName="EepromOp" Name="RbEepromVerify" Content="Verify" Margin="6,0,0,0"  IsCheckedChanged="OnEepromOpChanged"/>
+                <ComboBox    Grid.Column="5" Name="CbEepromFormat" Margin="12,0,0,0" MinWidth="120"/>
+                <Button      Grid.Column="6" Name="BtnEepromGo" Content="Go" Margin="6,0,0,0" Click="OnEepromGoClick"/>
+                <TextBlock   Grid.Column="7" Name="LblEepromUsage" Margin="12,0,0,0"
+                             VerticalAlignment="Center"
+                             FontFamily="Menlo,Monaco,Consolas,monospace" FontSize="11"
+                             Foreground="#a0a0a0"/>
+            </Grid>
+        </Grid>
+
+        <!-- Middle: fuses / lock / flags -->
+        <Grid DockPanel.Dock="Top" Margin="12,10,12,0"
+              RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto"
+              ColumnDefinitions="Auto,*,Auto,Auto">
+
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="Fuses"    FontWeight="SemiBold" Margin="0,6,0,4"/>
+            <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" Orientation="Horizontal" Spacing="8">
+                <TextBlock Text="L:" VerticalAlignment="Center"/>
+                <TextBox   Name="TxtLFuse" Width="90" PlaceholderText="0xFF"/>
+                <TextBlock Text="H:" VerticalAlignment="Center" Margin="8,0,0,0"/>
+                <TextBox   Name="TxtHFuse" Width="90" PlaceholderText="0xFF"/>
+                <TextBlock Text="E:" VerticalAlignment="Center" Margin="8,0,0,0"/>
+                <TextBox   Name="TxtEFuse" Width="90" PlaceholderText="0xFF"/>
+                <CheckBox  Name="CbSetFuses" Content="Set fuses on program" Margin="12,0,0,0"/>
+                <Button    Name="BtnFuseSelector" Content="Fuse selector…" Margin="12,0,0,0" Click="OnFuseSelectorClick"/>
+                <Button    Name="BtnReadFuses"    Content="Read fuses"     Margin="6,0,0,0"  Click="OnReadFusesClick"/>
+                <Button    Name="BtnWriteFuses"   Content="Write fuses"    Margin="6,0,0,0"  Click="OnWriteFusesClick"/>
+            </StackPanel>
+
+            <TextBlock Grid.Row="2" Grid.Column="0" Text="Lock bits" FontWeight="SemiBold" Margin="0,10,0,4"/>
+            <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="4" Orientation="Horizontal" Spacing="8">
+                <TextBox   Name="TxtLock" Width="90" PlaceholderText="0xFF"/>
+                <CheckBox  Name="CbSetLock" Content="Set lock on program" Margin="12,0,0,0"/>
+                <Button    Name="BtnReadLock"  Content="Read lock"  Margin="12,0,0,0" Click="OnReadLockClick"/>
+                <Button    Name="BtnWriteLock" Content="Write lock" Margin="6,0,0,0"  Click="OnWriteLockClick"/>
+            </StackPanel>
+
+            <TextBlock Grid.Row="4" Grid.Column="0" Text="Flags"    FontWeight="SemiBold" Margin="0,10,0,4"/>
+            <StackPanel Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="4" Orientation="Horizontal" Spacing="12">
+                <CheckBox Name="CbForce"             Content="Force (-F)"/>
+                <CheckBox Name="CbNoVerify"          Content="Disable verify (-V)"/>
+                <CheckBox Name="CbDisableFlashErase" Content="Disable auto-erase (-D)"/>
+                <CheckBox Name="CbEraseBoth"         Content="Erase flash+EEPROM (-e)"/>
+                <CheckBox Name="CbDoNotWrite"        Content="Dry run (-n)"/>
+                <TextBlock Text="Verbosity" VerticalAlignment="Center" Margin="12,0,0,0"/>
+                <ComboBox Name="CbVerbosity" Width="60"/>
+            </StackPanel>
+        </Grid>
+
+        <!-- Additional args + presets + cmd line -->
+        <Grid DockPanel.Dock="Top" Margin="12,12,12,0"
+              RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto"
+              ColumnDefinitions="Auto,*">
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="Additional args:" VerticalAlignment="Center" Margin="0,0,8,4"/>
+            <TextBox   Grid.Row="0" Grid.Column="1" Name="TxtAdditional" Margin="0,0,0,4"/>
+
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="Preset:" VerticalAlignment="Center" Margin="0,4,8,4"/>
+            <Grid      Grid.Row="1" Grid.Column="1" ColumnDefinitions="*,Auto" Margin="0,4,0,4">
+                <ComboBox Grid.Column="0" Name="CbPresets" HorizontalAlignment="Stretch"
+                          SelectionChanged="OnPresetSelectionChanged"/>
+                <Button   Grid.Column="1" Content="Manage…" Margin="6,0,0,0" Click="OnPresetManagerClick"/>
+            </Grid>
+
+            <TextBlock Grid.Row="2" Grid.Column="0" Text="Command:" VerticalAlignment="Center" Margin="0,4,8,4"/>
+            <TextBox   Grid.Row="2" Grid.Column="1" Name="TxtCmdLine" IsReadOnly="True"
+                       FontFamily="Menlo,Monaco,Consolas,monospace" FontSize="12"
+                       Margin="0,4,0,4"/>
+
+            <!-- Big action row -->
+            <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
+                        Orientation="Horizontal" Spacing="8" Margin="0,6,0,0">
+                <Button Name="BtnProgram"    Content="Program!"      Click="OnProgramClick"
+                        FontWeight="SemiBold" Padding="14,6"/>
+                <Button Name="BtnStop"       Content="Stop"          Click="OnStopClick"
+                        IsEnabled="False" Padding="10,6"/>
+                <Border Width="1" Background="#333" Margin="8,4"/>
+                <Button Name="BtnOptions" Content="Options…" Click="OnOptionsClick" Padding="10,6"/>
+                <Button Name="BtnAbout"   Content="About…"   Click="OnAboutClick"   Padding="10,6"/>
+            </StackPanel>
+        </Grid>
+
+        <!-- Log console (fills remaining space) -->
+        <Border Margin="12" BorderBrush="#333" BorderThickness="1" CornerRadius="4"
+                Background="#0f0f0f">
+            <ScrollViewer Name="LogScroll"
+                          HorizontalScrollBarVisibility="Auto"
+                          VerticalScrollBarVisibility="Auto"
+                          Padding="8">
+                <SelectableTextBlock Name="LogText"
+                                     FontFamily="Menlo,Monaco,Consolas,monospace"
+                                     FontSize="12"
+                                     Foreground="#e0e0e0"
+                                     TextWrapping="NoWrap"/>
+            </ScrollViewer>
+        </Border>
+
+    </DockPanel>
+</Window>
