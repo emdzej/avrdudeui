@@ -14,6 +14,10 @@
     <string>0.1.0</string>
     <key>CFBundleExecutable</key>
     <string>AvrdudeUI</string>
+    <key>CFBundleIconFile</key>
+    <string>AvrdudeUI</string>
+    <key>CFBundleIconName</key>
+    <string>AvrdudeUI</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleSignature</key>

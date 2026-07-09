@@ -29,6 +29,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Link>Languages\%(RecursiveDir)%(Filename)%(Extension)</Link>
     </None>
+    <AvaloniaResource Include="Assets\icons\AvrdudeUI.png" />
   </ItemGroup>
 
   <ItemGroup>
