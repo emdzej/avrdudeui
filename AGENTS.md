@@ -177,6 +177,25 @@ Target framework is fixed at `net10.0`. Bundle RID is `osx-arm64`.
 - If you changed anything visible: `./build/build.sh && open build/AvrdudeUI.app`
   and confirm the window opens and the log shows the startup banner.
 
+## CI / Release
+
+- `.github/workflows/ci.yml` — build + smoke test on every push/PR across
+  Ubuntu, macOS, and Windows. `avrdude` is installed via apt / Homebrew on
+  the Unix runners so the smoke test can validate conf parsing end-to-end.
+  Windows runner skips the smoke test (installing avrdude in CI isn't worth it).
+- `.github/workflows/release.yml` — on tag push `v*.*.*` builds .app / .tar.gz
+  / .zip for macOS-arm64, Linux-x64, Windows-x64 and attaches them to a
+  GitHub Release. `workflow_dispatch` supports manual runs (uploads to the
+  workflow run's artifacts, doesn't publish a Release).
+- Tagging cuts a release:
+  ```sh
+  git tag v0.2.0 && git push origin v0.2.0
+  ```
+- `AssemblyVersion` / `FileVersion` must be strictly numeric; both `build.sh`
+  and the release workflow strip prerelease suffixes (e.g. `0.2.0-rc1` →
+  `0.2.0.0` for those two properties, keeping the full string in `Version`
+  / `AssemblyInformationalVersion` / `CFBundleShortVersionString`).
+
 ## Reference
 
 - Upstream AVRDUDESS: https://github.com/ZakKemble/AVRDUDESS

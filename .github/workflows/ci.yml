@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build + smoke test (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-14, windows-latest]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up .NET 10
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore
+        run: dotnet restore src/AvrdudeUI/AvrdudeUI.csproj
+
+      - name: Build (Release)
+        run: dotnet build src/AvrdudeUI/AvrdudeUI.csproj -c Release --no-restore -warnaserror
+
+      - name: Install avrdude (Ubuntu)
+        if: matrix.os == 'ubuntu-latest'
+        run: sudo apt-get update && sudo apt-get install -y avrdude
+
+      - name: Install avrdude (macOS)
+        if: matrix.os == 'macos-14'
+        run: brew install avrdude
+
+      # Smoke test needs avrdude + its .conf to fully validate Core. On Windows we
+      # skip it because installing avrdude in CI is more effort than the coverage
+      # is worth — Ubuntu + macOS already exercise the exact same Core code path.
+      - name: Smoke test (Core end-to-end)
+        if: matrix.os != 'windows-latest'
+        run: dotnet run --project tools/CoreSmokeTest -c Release
