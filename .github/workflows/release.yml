@@ -2,11 +2,12 @@ name: Release
 
 on:
   push:
-    tags: ['v*.*.*']
+    # Semver tags without a "v" prefix, e.g. 0.2.0 or 1.4.0-rc1.
+    tags: ['[0-9]+.[0-9]+.[0-9]+*']
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version to build (without leading v), e.g. 0.2.0'
+        description: 'Version to build, e.g. 0.2.0'
         required: true
         default: '0.0.0-dev'
 
@@ -22,12 +23,12 @@ jobs:
     steps:
       - id: set
         run: |
-          # Tag pushes look like refs/tags/v1.2.3 → strip the "v".
+          # Tags are bare semver (no "v" prefix), e.g. refs/tags/1.2.3.
           # Manual dispatch supplies inputs.version directly.
           if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
             v="${{ github.event.inputs.version }}"
           else
-            v="${GITHUB_REF#refs/tags/v}"
+            v="${GITHUB_REF#refs/tags/}"
           fi
           echo "version=$v" >> "$GITHUB_OUTPUT"
           echo "Resolved version: $v"

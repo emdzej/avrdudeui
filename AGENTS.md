@@ -183,13 +183,14 @@ Target framework is fixed at `net10.0`. Bundle RID is `osx-arm64`.
   Ubuntu, macOS, and Windows. `avrdude` is installed via apt / Homebrew on
   the Unix runners so the smoke test can validate conf parsing end-to-end.
   Windows runner skips the smoke test (installing avrdude in CI isn't worth it).
-- `.github/workflows/release.yml` — on tag push `v*.*.*` builds .app / .tar.gz
-  / .zip for macOS-arm64, Linux-x64, Windows-x64 and attaches them to a
-  GitHub Release. `workflow_dispatch` supports manual runs (uploads to the
-  workflow run's artifacts, doesn't publish a Release).
+- `.github/workflows/release.yml` — on push of a bare semver tag (e.g. `0.2.0`
+  or `1.4.0-rc1`, no leading `v`) builds .app / .tar.gz / .zip for
+  macOS-arm64, Linux-x64, Windows-x64 and attaches them to a GitHub Release.
+  `workflow_dispatch` supports manual runs (uploads to the workflow run's
+  artifacts, doesn't publish a Release).
 - Tagging cuts a release:
   ```sh
-  git tag v0.2.0 && git push origin v0.2.0
+  git tag 0.2.0 && git push origin 0.2.0
   ```
 - `AssemblyVersion` / `FileVersion` must be strictly numeric; both `build.sh`
   and the release workflow strip prerelease suffixes (e.g. `0.2.0-rc1` →
